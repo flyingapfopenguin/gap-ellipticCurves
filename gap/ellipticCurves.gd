@@ -16,4 +16,13 @@
 
 #! @Description
 #!   Insert documentation for your function here
-DeclareGlobalFunction( "ellipticCurves_Example" );
+
+DeclareCategory("IsEllipticCurve", IsGroup and IsAbelian);
+DeclareGlobalFunction("EllipticCurve");
+DeclareProperty("IsInShortWeierstrassForm", IsEllipticCurve);
+
+DeclareCategory("IsPointOnEllipticCurve", IsCommutativeElement and IsAssociativeElement and IsMultiplicativeElementWithInverse and CanEasilyCompareElements);
+DeclareCategoryCollections("IsPointOnEllipticCurve");
+InstallTrueMethod(IsGeneratorsOfMagmaWithInverses, IsPointOnEllipticCurveCollection);
+DeclareRepresentation("IsPointOnEllipticCurveRep", IsComponentObjectRep, ["coordinates"]);
+DeclareGlobalFunction("PointOnEllipticCurve");
