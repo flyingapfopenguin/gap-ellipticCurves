@@ -18,11 +18,12 @@
 #!   Insert documentation for your function here
 
 DeclareCategory("IsEllipticCurve", IsGroup and IsAbelian);
-DeclareGlobalFunction("EllipticCurve");
+DeclareOperation("EllipticCurve", [ IsDenseList, IsField ]);
 DeclareProperty("IsInShortWeierstrassForm", IsEllipticCurve);
 
 DeclareCategory("IsPointOnEllipticCurve", IsCommutativeElement and IsAssociativeElement and IsMultiplicativeElementWithInverse and CanEasilyCompareElements);
 DeclareCategoryCollections("IsPointOnEllipticCurve");
 InstallTrueMethod(IsGeneratorsOfMagmaWithInverses, IsPointOnEllipticCurveCollection);
 DeclareRepresentation("IsPointOnEllipticCurveRep", IsComponentObjectRep, ["coordinates"]);
-DeclareGlobalFunction("PointOnEllipticCurve");
+DeclareOperation("PointOnEllipticCurve", [ IsFamily, IsDenseList ]);
+DeclareOperation("PointOnEllipticCurve", [ IsEllipticCurve, IsDenseList ]);

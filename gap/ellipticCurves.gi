@@ -47,11 +47,11 @@ end;
 ### CONSTRUCTORS
 #########################
 
-InstallGlobalFunction(EllipticCurve,
+InstallMethod(EllipticCurve,
+	"for a dense list and a field",
+	[ IsDenseList, IsField ],
 	function(coeffs, f)
 		local fam, G;
-		Assert(0, IsList(coeffs));
-		Assert(0, IsField(f));
 		Assert(0, Length(coeffs) in [2,6]);
 		if Length(coeffs) = 6 then
 			Assert(0, IsZero(coeffs[5]));
@@ -77,7 +77,9 @@ InstallGlobalFunction(EllipticCurve,
 	end
 );
 
-InstallGlobalFunction(PointOnEllipticCurve,
+InstallMethod(PointOnEllipticCurve,
+	"for an object in `IsFamily' and a dense list",
+	[ IsFamily, IsDenseList ],
 	function(fam, coords)
 		Assert(0, Length(coords) in [0,2]);
 		if not AreCoordsOnEllipticCurve(coords, fam!.coefficients) then
@@ -85,6 +87,14 @@ InstallGlobalFunction(PointOnEllipticCurve,
 		fi;
 		return Objectify( NewType(ElementsFamily(fam), IsPointOnEllipticCurve and IsPointOnEllipticCurveRep),
 			rec(coordinates:=coords*One(fam!.field)));
+	end
+);
+
+InstallMethod(PointOnEllipticCurve,
+	"for an object in `IsEllipticCurve' and a dense list",
+	[ IsEllipticCurve, IsDenseList ],
+	function(G, coords)
+		return PointOnEllipticCurve(FamilyObj(G), coords);
 	end
 );
 
