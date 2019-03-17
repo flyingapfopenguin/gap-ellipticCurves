@@ -25,5 +25,6 @@ DeclareCategory("IsPointOnEllipticCurve", IsCommutativeElement and IsAssociative
 DeclareCategoryCollections("IsPointOnEllipticCurve");
 InstallTrueMethod(IsGeneratorsOfMagmaWithInverses, IsPointOnEllipticCurveCollection);
 DeclareRepresentation("IsPointOnEllipticCurveRep", IsComponentObjectRep, ["coordinates"]);
-DeclareOperation("PointOnEllipticCurve", [ IsFamily, IsDenseList ]);
-DeclareOperation("PointOnEllipticCurve", [ IsEllipticCurve, IsDenseList ]);
+DeclareOperation("PointOnEllipticCurve", [ IsDenseList, IsFamily ]);
+DeclareOperation("PointOnEllipticCurve", [ IsDenseList, IsEllipticCurve ]);
+DeclareOperation("PointOnEllipticCurve", [ IsDenseList, IsPointOnEllipticCurve ]);

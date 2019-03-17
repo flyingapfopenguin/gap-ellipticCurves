@@ -78,9 +78,9 @@ InstallMethod(EllipticCurve,
 );
 
 InstallMethod(PointOnEllipticCurve,
-	"for an object in `IsFamily' and a dense list",
-	[ IsFamily, IsDenseList ],
-	function(fam, coords)
+	"for a dense list and an object in `IsFamily'",
+	[ IsDenseList, IsFamily ],
+	function(coords, fam)
 		Assert(0, Length(coords) in [0,2]);
 		if not AreCoordsOnEllipticCurve(coords, fam!.coefficients) then
 			Error(" Given coordinates describe a point that is not on the given curve. ");
@@ -91,10 +91,18 @@ InstallMethod(PointOnEllipticCurve,
 );
 
 InstallMethod(PointOnEllipticCurve,
-	"for an object in `IsEllipticCurve' and a dense list",
-	[ IsEllipticCurve, IsDenseList ],
-	function(G, coords)
-		return PointOnEllipticCurve(FamilyObj(G), coords);
+	"for a dense list and an object in `IsEllipticCurve'",
+	[ IsDenseList, IsEllipticCurve ],
+	function(coords, G)
+		return PointOnEllipticCurve(coords, FamilyObj(G));
+	end
+);
+
+InstallMethod(PointOnEllipticCurve,
+	"for a dense list and an object in `IsPointOnEllipticCurve'",
+	[ IsDenseList, IsPointOnEllipticCurve ],
+	function(coords, p)
+		return PointOnEllipticCurve(coords, CollectionsFamily(FamilyObj(p)));
 	end
 );
 
@@ -141,7 +149,7 @@ InstallMethod(OneImmutable,
 	[IsEllipticCurve],
 	101, # the prio is needed to beat the One method in lib/memory.gi
 	function(G)
-		return PointOnEllipticCurve(FamilyObj(G), []);
+		return PointOnEllipticCurve([], G);
 	end
 );
 
@@ -149,7 +157,7 @@ InstallMethod(OneImmutable,
 	"for an object in `IsPointOnEllipticCurve'",
 	[IsPointOnEllipticCurve],
 	function(p)
-		return PointOnEllipticCurve(CollectionsFamily(FamilyObj(p)), []);
+		return PointOnEllipticCurve([], p);
 	end
 );
 
@@ -232,7 +240,7 @@ InstallMethod(\*,
 		fi;
 		x3 := l^2 + coeffs[1]*l - coeffs[2] - x1 - x2;
 		y3 := -(l+coeffs[1])*x3 - v - coeffs[3];
-		return PointOnEllipticCurve( CollectionsFamily(FamilyObj(p)), [x3, y3]);
+		return PointOnEllipticCurve( [x3, y3], p);
 	end
 );
 
@@ -248,7 +256,7 @@ InstallMethod(InverseOp,
 		y1 := p!.coordinates[2];
 		coeffs := CollectionsFamily(FamilyObj(p))!.coefficients;
 		y2 := -(y1 + coeffs[1]*x + coeffs[3]);
-		return PointOnEllipticCurve(CollectionsFamily(FamilyObj(p)), [x, y2]);
+		return PointOnEllipticCurve( [x, y2], p);
 	end
 );
 
@@ -263,7 +271,7 @@ InstallMethod(Enumerator,
 				if not AreCoordsOnEllipticCurve([x,y], FamilyObj(G)!.coefficients) then
 					continue;
 				fi;
-				Append(res, [ PointOnEllipticCurve(FamilyObj(G), [x,y]) ] );
+				Append(res, [ PointOnEllipticCurve([x,y], G) ] );
 			od;
 		od;
 		return res;
