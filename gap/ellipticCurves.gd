@@ -17,6 +17,9 @@
 #! @Description
 #!   Insert documentation for your function here
 
+DeclareGlobalFunction("__ellpiticCurve__delta");
+DeclareGlobalFunction("__ellpiticCurve__AreCoordsOnCurve");
+
 DeclareCategory("IsEllipticCurve", IsGroup and IsAbelian);
 DeclareOperation("EllipticCurve", [ IsDenseList, IsField ]);
 DeclareProperty("IsInShortWeierstrassForm", IsEllipticCurve);

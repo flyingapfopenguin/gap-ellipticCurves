@@ -8,28 +8,32 @@
 ### AUX FUNCTIONS
 #########################
 
-delta:=function(coeffs)
-	local b2, b4, b6, b8, d;
-	Assert(0, Length(coeffs) = 6);
-	Assert(0, IsZero(coeffs[5]));
-	b2 := coeffs[1]^2 + 4*coeffs[2];
-	b4 := 2*coeffs[4] + coeffs[1]*coeffs[3];
-	b6 := coeffs[3]^2 + 4*coeffs[6];
-	b8 := coeffs[1]^2*coeffs[6] + 4*coeffs[2]*coeffs[6] - coeffs[1]*coeffs[3]*coeffs[4] + coeffs[2]*coeffs[3]^2 - coeffs[4]^2;
-	d  := -b2^2*b8 - 8*b4^3 - 27*b6^2 + 9*b2*b4*b6;
-	return d;
-end;
+InstallGlobalFunction(__ellpiticCurve__delta,
+	function(coeffs)
+		local b2, b4, b6, b8, d;
+		Assert(0, Length(coeffs) = 6);
+		Assert(0, IsZero(coeffs[5]));
+		b2 := coeffs[1]^2 + 4*coeffs[2];
+		b4 := 2*coeffs[4] + coeffs[1]*coeffs[3];
+		b6 := coeffs[3]^2 + 4*coeffs[6];
+		b8 := coeffs[1]^2*coeffs[6] + 4*coeffs[2]*coeffs[6] - coeffs[1]*coeffs[3]*coeffs[4] + coeffs[2]*coeffs[3]^2 - coeffs[4]^2;
+		d  := -b2^2*b8 - 8*b4^3 - 27*b6^2 + 9*b2*b4*b6;
+		return d;
+	end
+);
 
-AreCoordsOnEllipticCurve:=function(coords, coeffs)
-	local r;
-	if IsEmpty(coords) then
-		return true;
-	fi;
-	Assert(0, Length(coords) = 2);
-	r := coords[2]^2 + coeffs[1]*coords[1]*coords[2] + coeffs[3]*coords[2]
-		- ( coords[1]^3 + coeffs[2]*coords[1]^2 + coeffs[4]*coords[1] + coeffs[6] );
-	return IsZero(r);
-end;
+InstallGlobalFunction(__ellpiticCurve__AreCoordsOnCurve,
+	function(coords, coeffs)
+		local r;
+		if IsEmpty(coords) then
+			return true;
+		fi;
+		Assert(0, Length(coords) = 2);
+		r := coords[2]^2 + coeffs[1]*coords[1]*coords[2] + coeffs[3]*coords[2]
+			- ( coords[1]^3 + coeffs[2]*coords[1]^2 + coeffs[4]*coords[1] + coeffs[6] );
+		return IsZero(r);
+	end
+);
 
 # TODO How to print FFEs nicely?
 ArrayOfFFEForPrinting:=function(array)
@@ -59,7 +63,7 @@ InstallMethod(EllipticCurve,
 			coeffs:=[0, 0, 0, coeffs[1], 0, coeffs[2]];
 		fi;
 		coeffs:=coeffs*One(f);
-		if IsZero(delta(coeffs)) then
+		if IsZero(__ellpiticCurve__delta(coeffs)) then
 			Error(" Given curve is not singular. ");
 		fi;
 		fam:=CollectionsFamily(NewFamily(Concatenation("elliptic curve with ", String(ArrayOfFFEForPrinting(coeffs)), " over ", String(f)), IsPointOnEllipticCurve));
@@ -82,7 +86,7 @@ InstallMethod(PointOnEllipticCurve,
 	[ IsDenseList, IsFamily ],
 	function(coords, fam)
 		Assert(0, Length(coords) in [0,2]);
-		if not AreCoordsOnEllipticCurve(coords, fam!.coefficients) then
+		if not __ellpiticCurve__AreCoordsOnCurve(coords, fam!.coefficients) then
 			Error(" Given coordinates describe a point that is not on the given curve. ");
 		fi;
 		return Objectify( NewType(ElementsFamily(fam), IsPointOnEllipticCurve and IsPointOnEllipticCurveRep),
@@ -268,7 +272,7 @@ InstallMethod(Enumerator,
 		res := [ One(G) ];
 		for x in FamilyObj(G)!.field do
 			for y in FamilyObj(G)!.field do
-				if not AreCoordsOnEllipticCurve([x,y], FamilyObj(G)!.coefficients) then
+				if not __ellpiticCurve__AreCoordsOnCurve([x,y], FamilyObj(G)!.coefficients) then
 					continue;
 				fi;
 				Append(res, [ PointOnEllipticCurve([x,y], G) ] );
