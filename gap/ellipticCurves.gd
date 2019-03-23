@@ -23,6 +23,9 @@ DeclareGlobalFunction("__ellpiticCurve__AreCoordsOnCurve");
 DeclareCategory("IsEllipticCurve", IsGroup and IsAbelian);
 DeclareOperation("EllipticCurve", [ IsDenseList, IsField ]);
 DeclareProperty("IsInShortWeierstrassForm", IsEllipticCurve);
+DeclareAttribute("Discriminant", IsEllipticCurve);
+DeclareOperation("AreCoordinatesOnCurve", [ IsDenseList, IsEllipticCurve ]);
+DeclareOperation("GetDefiningEquation", [ IsEllipticCurve ]);
 
 DeclareCategory("IsPointOnEllipticCurve", IsCommutativeElement and IsAssociativeElement and IsMultiplicativeElementWithInverse and CanEasilyCompareElements);
 DeclareCategoryCollections("IsPointOnEllipticCurve");

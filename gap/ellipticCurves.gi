@@ -111,7 +111,7 @@ InstallMethod(PointOnEllipticCurve,
 );
 
 #########################
-### Check Weierstrass Form
+### Properties of elliptic curves
 #########################
 
 InstallMethod(IsInShortWeierstrassForm,
@@ -121,6 +121,40 @@ InstallMethod(IsInShortWeierstrassForm,
 		local coeffs;
 		coeffs:=FamilyObj(G)!.coefficients;
 		return ForAll( List([1..3], i->coeffs[i]), x -> IsZero(x) );
+	end
+);
+
+InstallMethod(Discriminant,
+	"for an object in `IsEllipticCurve'",
+	[IsEllipticCurve],
+	function(G)
+		local coeffs;
+		coeffs:=FamilyObj(G)!.coefficients;
+		return __ellpiticCurve__delta(coeffs);
+	end
+);
+
+InstallMethod(AreCoordinatesOnCurve,
+	"for a dense list and an object in `IsEllipticCurve'",
+	[IsDenseList, IsEllipticCurve],
+	function(coords, G)
+		local coeffs;
+		coeffs:=FamilyObj(G)!.coefficients;
+		return __ellpiticCurve__AreCoordsOnCurve(coords, coeffs);
+	end
+);
+
+InstallMethod(GetDefiningEquation,
+	"for an object in `IsEllipticCurve'",
+	[IsEllipticCurve],
+	function(G)
+		local coeffs, field, x, y, poly;
+		coeffs:=FamilyObj(G)!.coefficients;
+		field:=FamilyObj(G)!.field;
+		x:=Indeterminate(field, "x");
+		y:=Indeterminate(field, "y");
+		poly:=y^2+coeffs[1]*x*y+coeffs[3]*y-x^3-coeffs[2]*x^2-coeffs[4]*x-coeffs[6];
+		return [ poly, [x,y] ];
 	end
 );
 
