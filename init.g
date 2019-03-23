@@ -5,3 +5,4 @@
 #
 
 ReadPackage( "ellipticCurves", "gap/ellipticCurves.gd");
+ReadPackage( "ellipticCurves", "gap/endomorphisms.gd");
