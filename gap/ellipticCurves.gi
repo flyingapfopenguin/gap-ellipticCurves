@@ -35,17 +35,15 @@ InstallGlobalFunction(__ellpiticCurve__AreCoordsOnCurve,
 	end
 );
 
-# TODO How to print FFEs nicely?
-ArrayOfFFEForPrinting:=function(array)
-	local map;
-	map:=function(x)
-		if IsPrimeField(Field(x)) then
-			return IntFFE(x);
-		fi;
-		return x;
-	end;
-	return List(array, x->map(x));
-end;
+InstallGlobalFunction(__ellpiticCurve__GetDefiningEquation,
+	function(coeffs, field)
+		local x, y, poly;
+		x:=Indeterminate(field, "x");
+		y:=Indeterminate(field, "y");
+		poly:=y^2+coeffs[1]*x*y+coeffs[3]*y-x^3-coeffs[2]*x^2-coeffs[4]*x-coeffs[6];
+		return [ poly, [x,y] ];
+	end
+);
 
 #########################
 ### CONSTRUCTORS
@@ -66,14 +64,13 @@ InstallMethod(EllipticCurve,
 		if IsZero(__ellpiticCurve__delta(coeffs)) then
 			Error(" Given curve is not singular. ");
 		fi;
-		fam:=CollectionsFamily(NewFamily(Concatenation("elliptic curve with ", String(ArrayOfFFEForPrinting(coeffs)), " over ", String(f)), IsPointOnEllipticCurve));
+		fam:=CollectionsFamily(NewFamily(Concatenation("points on elliptic curve with ", String(__ellpiticCurve__GetDefiningEquation(coeffs, f)[1]), " over ", String(f)), IsPointOnEllipticCurve));
 		fam!.coefficients:=coeffs;
 		fam!.field:=f;
 		G:=Objectify(NewType(fam, IsEllipticCurve and IsAttributeStoringRep), rec());
 		Assert(0, G <> fail);
 		SetIsWholeFamily(G, true);
-		### TODO Format of String for EC
-		SetName(G, Concatenation("points on elliptic curve with ", String(ArrayOfFFEForPrinting(coeffs)), " over ", String(f)) );
+		SetName(G, Concatenation("elliptic curve with ", String(__ellpiticCurve__GetDefiningEquation(coeffs, f)[1]), " over ", String(f)) );
 		if IsFinite(f) then 
 			SetIsFinite(G, true);
 		fi;
@@ -148,13 +145,10 @@ InstallMethod(GetDefiningEquation,
 	"for an object in `IsEllipticCurve'",
 	[IsEllipticCurve],
 	function(G)
-		local coeffs, field, x, y, poly;
+		local coeffs, field;
 		coeffs:=FamilyObj(G)!.coefficients;
 		field:=FamilyObj(G)!.field;
-		x:=Indeterminate(field, "x");
-		y:=Indeterminate(field, "y");
-		poly:=y^2+coeffs[1]*x*y+coeffs[3]*y-x^3-coeffs[2]*x^2-coeffs[4]*x-coeffs[6];
-		return [ poly, [x,y] ];
+		return __ellpiticCurve__GetDefiningEquation(coeffs, field);
 	end
 );
 
@@ -166,7 +160,11 @@ InstallMethod(PrintObj,
 	"for object in `IsPointOnEllipticCurve'",
 	[IsPointOnEllipticCurve and IsPointOnEllipticCurveRep],
 	function(point)
-		Print("point ", ArrayOfFFEForPrinting(point!.coordinates), " on ", ArrayOfFFEForPrinting(CollectionsFamily(FamilyObj(point))!.coefficients));
+		if IsOne(point) then
+			Print("infinite point");
+		else
+			Print("point ", point!.coordinates);
+		fi;
 	end
 );
 
@@ -174,7 +172,11 @@ InstallMethod(ViewObj,
 	"for object in `IsPointOnEllipticCurve'",
 	[IsPointOnEllipticCurve and IsPointOnEllipticCurveRep],
 	function(point)
-		Print(ArrayOfFFEForPrinting(point!.coordinates));
+		if IsOne(point) then
+			Print("infinite point");
+		else
+			Print(point!.coordinates);
+		fi;
 	end
 );
 

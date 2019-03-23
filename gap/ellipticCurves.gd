@@ -19,6 +19,7 @@
 
 DeclareGlobalFunction("__ellpiticCurve__delta");
 DeclareGlobalFunction("__ellpiticCurve__AreCoordsOnCurve");
+DeclareGlobalFunction("__ellpiticCurve__GetDefiningEquation");
 
 DeclareCategory("IsEllipticCurve", IsGroup and IsAbelian);
 DeclareOperation("EllipticCurve", [ IsDenseList, IsField ]);
