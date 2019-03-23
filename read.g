@@ -5,3 +5,4 @@
 #
 ReadPackage( "ellipticCurves", "gap/ellipticCurves.gi");
 ReadPackage( "ellipticCurves", "gap/endomorphisms.gi");
+ReadPackage( "ellipticCurves", "gap/jInvariant.gi");
