@@ -304,13 +304,16 @@ InstallMethod(Enumerator,
 	"for an object in `IsEllipticCurve'",
 	[IsEllipticCurve],
 	function(G)
-		local x, y, res;
+		local field, x, y, res, poly, vars;
+		field := FamilyObj(G)!.field;
+		if not IsFinite(field) then
+			TryNextMethod();
+		fi;
+		poly := GetDefiningEquation(G)[1];
+		vars := GetDefiningEquation(G)[2];
 		res := [ One(G) ];
-		for x in FamilyObj(G)!.field do
-			for y in FamilyObj(G)!.field do
-				if not __ellpiticCurve__AreCoordsOnCurve([x,y], FamilyObj(G)!.coefficients) then
-					continue;
-				fi;
+		for x in field do
+			for y in AsSet( RootsOfPolynomial( Value(poly, [vars[1]], [x]) )) do
 				Append(res, [ PointOnEllipticCurve([x,y], G) ] );
 			od;
 		od;
