@@ -317,4 +317,22 @@ InstallMethod(\^,
 	end
 );
 
-# TODO implement degree of endomorphism
+#########################
+### Degree of endomorphism
+#########################
+
+# TODO this needs a unique representation of endomorphisms to work
+
+#InstallMethod(Degree,
+#	"for an object in `IsEllipticCurveEndomorphism'",
+#	[ IsEllipticCurveEndomorphism and IsEllipticCurveEndomorphismRep ],
+#	function(endomorphism)
+#		local R;
+#		if IsZero(endomorphism) then
+#			return 0;
+#		fi;
+#		R := endomorphism!.R;
+#		return MaximumList([ Degree(DenominatorOfRationalFunction(R)), Degree(NumeratorOfRationalFunction(R))])
+#			- Degree(Gcd(DenominatorOfRationalFunction(R), NumeratorOfRationalFunction(R)));
+#	end
+#);

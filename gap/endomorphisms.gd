@@ -8,3 +8,5 @@ DeclareRepresentation("IsEllipticCurveEndomorphismRep", IsComponentObjectRep, ["
 DeclareOperation("EllipticCurveEndomorphism", [ IsEllipticCurveEndomorphismRing, IsUnivariateRationalFunction, IsUnivariateRationalFunction ]);
 DeclareOperation("EllipticCurveEndomorphism", [ IsEllipticCurve, IsUnivariateRationalFunction, IsUnivariateRationalFunction ]);
 DeclareOperation("EllipticCurveEndomorphism", [ IsEllipticCurve, IsInt ]);
+
+DeclareOperation("Degree", [ IsEllipticCurveEndomorphism and IsEllipticCurveEndomorphismRep ]);
