@@ -24,6 +24,7 @@ DeclareGlobalFunction("__ellpiticCurve__GetDefiningEquation");
 DeclareCategory("IsEllipticCurve", IsGroup and IsAbelian);
 DeclareOperation("EllipticCurve", [ IsDenseList, IsField ]);
 DeclareProperty("IsInShortWeierstrassForm", IsEllipticCurve);
+DeclareProperty("IsSupersingular", IsEllipticCurve);
 DeclareAttribute("Discriminant", IsEllipticCurve);
 DeclareOperation("AreCoordinatesOnCurve", [ IsDenseList, IsEllipticCurve ]);
 DeclareOperation("GetDefiningEquation", [ IsEllipticCurve ]);

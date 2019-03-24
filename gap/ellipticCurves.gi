@@ -121,6 +121,20 @@ InstallMethod(IsInShortWeierstrassForm,
 	end
 );
 
+InstallMethod(IsSupersingular,
+	"for an object in `IsEllipticCurve'",
+	[IsEllipticCurve],
+	function(G)
+		local field, traceOfFrobenius;
+		field := FamilyObj(G)!.field;
+		if (not IsFinite(G)) or (not IsFinite(field)) then
+			Error(" The property of supersingular is only defnined for finite groups over finite fields. ");
+		fi;
+		traceOfFrobenius := Size(field) + 1 - Size(G);
+		return IsZero( traceOfFrobenius mod Characteristic(field) );
+	end
+);
+
 InstallMethod(Discriminant,
 	"for an object in `IsEllipticCurve'",
 	[IsEllipticCurve],
