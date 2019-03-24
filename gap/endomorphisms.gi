@@ -39,9 +39,6 @@ InstallMethod(EllipticCurveEndomorphism,
 	"for an object in `IsEllipticCurve' and two univariate rational functions",
 	[ IsEllipticCurve, IsUnivariateRationalFunction, IsUnivariateRationalFunction ],
 	function(curve, ratFuncR, ratFuncS)
-		if not IsInShortWeierstrassForm(curve) then
-			TryNextMethod();
-		fi;
 		return EllipticCurveEndomorphism(EllipticCurveEndomorphismRing(curve), ratFuncR, ratFuncS);
 	end
 );
@@ -51,6 +48,9 @@ InstallMethod(EllipticCurveEndomorphism,
 	[ IsEllipticCurve, IsInt ],
 	function(curve, n)
 		local endomorphism, x, field, R, S;
+		if not IsInShortWeierstrassForm(curve) then
+			TryNextMethod();
+		fi;
 		endomorphism := n*One(EllipticCurveEndomorphismRing(curve));
 		x := IndeterminateOfUnivariateRationalFunction(endomorphism!.R);
 		Assert(0, x = IndeterminateOfUnivariateRationalFunction(endomorphism!.S));
@@ -233,6 +233,9 @@ InstallMethod(\+,
 			return Zero(endomorphism1);
 		fi;
 		curve := CollectionsFamily(FamilyObj(endomorphism1))!.curve;
+		if not IsInShortWeierstrassForm(curve) then
+			TryNextMethod();
+		fi;
 		coeffs := FamilyObj(curve)!.coefficients;
 		y2 := x^3 + coeffs[4]*x + coeffs[6];
 		if not (endomorphism1!.R = endomorphism2!.R) then
@@ -260,6 +263,9 @@ InstallMethod(\*,
 		Assert(0, x = IndeterminateOfUnivariateRationalFunction(endomorphism2!.R));
 		Assert(0, x = IndeterminateOfUnivariateRationalFunction(endomorphism2!.S));
 		curve := CollectionsFamily(FamilyObj(endomorphism1))!.curve;
+		if not IsInShortWeierstrassForm(curve) then
+			TryNextMethod();
+		fi;
 		R := Value(endomorphism2!.R, [x], [endomorphism1!.R]);
 		S := Value(endomorphism2!.S, [x], [endomorphism1!.R]) * endomorphism1!.S;
 		return EllipticCurveEndomorphism(curve, R, S);
@@ -272,6 +278,9 @@ InstallMethod(AdditiveInverseOp,
 	function(endomorphism)
 		local curve;
 		curve := CollectionsFamily(FamilyObj(endomorphism))!.curve;
+		if not IsInShortWeierstrassForm(curve) then
+			TryNextMethod();
+		fi;
 		return EllipticCurveEndomorphism(curve, endomorphism!.R, -endomorphism!.S);
 	end
 );

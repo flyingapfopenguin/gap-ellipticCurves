@@ -117,7 +117,7 @@ InstallMethod(IsInShortWeierstrassForm,
 	function(G)
 		local coeffs;
 		coeffs:=FamilyObj(G)!.coefficients;
-		return ForAll( List([1..3], i->coeffs[i]), x -> IsZero(x) );
+		return ForAll( List([1..3], i->coeffs[i]), IsZero );
 	end
 );
 
@@ -201,7 +201,8 @@ InstallMethod(OneImmutable,
 	end
 );
 
-# TODO comment
+# some function in the group library of GAP require
+# an explicit OneMutable for elements of the group
 InstallMethod(OneMutable,
 	"for an object in `IsPointOnEllipticCurve'",
 	[IsPointOnEllipticCurve],
@@ -304,13 +305,14 @@ InstallMethod(Enumerator,
 	"for an object in `IsEllipticCurve'",
 	[IsEllipticCurve],
 	function(G)
-		local field, x, y, res, poly, vars;
+		local field, definingEquation, poly, vars, res, x, y;
 		field := FamilyObj(G)!.field;
 		if not IsFinite(field) then
 			TryNextMethod();
 		fi;
-		poly := GetDefiningEquation(G)[1];
-		vars := GetDefiningEquation(G)[2];
+		definingEquation := GetDefiningEquation(G);
+		poly := definingEquation[1];
+		vars := definingEquation[2];
 		res := [ One(G) ];
 		for x in field do
 			for y in AsSet( RootsOfPolynomial( Value(poly, [vars[1]], [x]) )) do
