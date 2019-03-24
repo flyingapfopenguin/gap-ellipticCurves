@@ -8,3 +8,4 @@ ReadPackage( "ellipticCurves", "gap/ellipticCurves.gd");
 ReadPackage( "ellipticCurves", "gap/endomorphisms.gd");
 ReadPackage( "ellipticCurves", "gap/jInvariant.gd");
 ReadPackage( "ellipticCurves", "gap/random.gd");
+ReadPackage( "ellipticCurves", "gap/schoof.gd");
